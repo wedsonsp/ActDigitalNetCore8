@@ -99,5 +99,15 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// Indicates whether the user is active, inactive, or blocked in the system.
         /// </summary>
         public ClienteStatus Status { get; set; }
+
+        /// <summary>
+        /// Activates the user account.
+        /// Changes the user's status to Active.
+        /// </summary>
+        public void Activate()
+        {
+            Status = ClienteStatus.Active;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

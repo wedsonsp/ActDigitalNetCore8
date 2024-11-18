@@ -42,6 +42,10 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => src.Telefone));
 
+            // Configuração do mapeamento entre CreateClienteResult e CreateClienteResponse
+            CreateMap<CreateClienteResult, CreateClienteResponse>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)); // Ajuste a correspondência entre as propriedades
+
 
         }
 

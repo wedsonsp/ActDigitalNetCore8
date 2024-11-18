@@ -15,12 +15,12 @@ public class CreateClienteRequest
     /// <summary>
     /// Gets or sets the email address of the client. This field is optional.
     /// </summary>
-    public string? Email { get; set; }
+    public string? Email { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the phone number of the client. This field is optional.
     /// </summary>
-    public string? Telefone { get; set; }
+    public string? Telefone { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the initial status of the user account.

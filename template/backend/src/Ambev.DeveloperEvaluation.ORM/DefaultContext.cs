@@ -9,6 +9,7 @@ namespace Ambev.DeveloperEvaluation.ORM;
 public class DefaultContext : DbContext
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Cliente> Clientes { get; set; }
 
     public DefaultContext(DbContextOptions<DefaultContext> options) : base(options)
     {
@@ -17,6 +18,13 @@ public class DefaultContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        // Garantir que User e Cliente mapeiem para tabelas separadas
+        modelBuilder.Entity<User>()
+            .ToTable("Users");
+
+        modelBuilder.Entity<Cliente>()
+            .ToTable("Clientes");
+
         base.OnModelCreating(modelBuilder);
     }
 }

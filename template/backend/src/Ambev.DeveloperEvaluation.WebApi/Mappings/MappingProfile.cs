@@ -1,6 +1,10 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Auth.AuthenticateUser;
+using Ambev.DeveloperEvaluation.Application.Clientes.CreateCliente;
+using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
+using Ambev.DeveloperEvaluation.WebApi.Features.Clients.CreateCliente;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
 using AutoMapper;
 
@@ -31,6 +35,14 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
+
+            // Mapeia os dados de CreateClienteRequest para CreateClienteCommand
+            CreateMap<CreateClienteRequest, CreateClienteCommand>()
+                .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.Nome))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Telefone, opt => opt.MapFrom(src => src.Telefone));
+
+
         }
 
     }

@@ -37,6 +37,8 @@ public class Program
             // Registrando repositórios
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+            builder.Services.AddScoped<IFilialRepository, FilialRepository>();
+            builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
             builder.Services.AddDbContext<DefaultContext>(options =>
                 options.UseNpgsql(

@@ -100,6 +100,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// </summary>
         public ClienteStatus Status { get; set; }
 
+        // Adicionando a propriedade FilialId
+        public Guid? FilialId { get; set; }  // Chave estrangeira para a Filial
+
+        // Navegação para a entidade Filial
+        public Filial? Filial { get; set; }
+
         /// <summary>
         /// Activates the user account.
         /// Changes the user's status to Active.

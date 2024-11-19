@@ -1,6 +1,9 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories
 {
@@ -17,7 +20,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <param name="context">The database context</param>
         public ClienteRepository(DefaultContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         /// <summary>
@@ -28,6 +31,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <returns>The created client</returns>
         public async Task<Cliente> CreateAsync(Cliente cliente, CancellationToken cancellationToken = default)
         {
+            if (cliente == null)
+                throw new ArgumentNullException(nameof(cliente));
+
             await _context.Clientes.AddAsync(cliente, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return cliente;
@@ -41,6 +47,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <returns>The client if found, null otherwise</returns>
         public async Task<Cliente?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            if (id == Guid.Empty)
+                throw new ArgumentException("Invalid client ID.", nameof(id));
+
             return await _context.Clientes
                 .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         }
@@ -53,6 +62,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <returns>The client if found, null otherwise</returns>
         public async Task<Cliente?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrEmpty(email))
+                throw new ArgumentException("Email cannot be null or empty.", nameof(email));
+
             return await _context.Clientes
                 .FirstOrDefaultAsync(c => c.Email == email, cancellationToken);
         }
@@ -65,6 +77,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <returns>True if the client was deleted, false if not found</returns>
         public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
+            if (id == Guid.Empty)
+                throw new ArgumentException("Invalid client ID.", nameof(id));
+
             var cliente = await GetByIdAsync(id, cancellationToken);
             if (cliente == null)
                 return false;

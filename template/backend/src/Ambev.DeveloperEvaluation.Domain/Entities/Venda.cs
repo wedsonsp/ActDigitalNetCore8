@@ -1,51 +1,96 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Common;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using Ambev.DeveloperEvaluation.Domain.Common;
+using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
     /// <summary>
-    /// Representa uma venda realizada no sistema.
+    /// Representa uma venda no sistema
     /// </summary>
     public class Venda : BaseEntity
     {
         /// <summary>
-        /// Número único da venda.
+        /// Número da venda
         /// </summary>
         public string NumeroVenda { get; set; } = string.Empty;
 
         /// <summary>
-        /// Data e hora da venda.
+        /// Data da venda
         /// </summary>
-        public DateTime DataVenda { get; set; } = DateTime.UtcNow;
+        public DateTime DataVenda { get; set; }
 
         /// <summary>
-        /// Referência ao cliente que realizou a compra.
+        /// Identificador do cliente associado à venda
         /// </summary>
         public Guid IdCliente { get; set; }
 
         /// <summary>
-        /// Referência à filial onde a venda foi realizada.
+        /// Nome do cliente associado à venda
+        /// </summary>
+        public string NomeCliente { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Identificador da filial associada à venda
         /// </summary>
         public Guid IdFilial { get; set; }
 
         /// <summary>
-        /// Valor total da venda.
+        /// Nome da filial associada à venda
         /// </summary>
-        public decimal TotalVenda { get; set; }
+        public string NomeFilial { get; set; } = string.Empty;
 
         /// <summary>
-        /// Status da venda (se foi cancelada ou não).
+        /// Valor total da venda
         /// </summary>
-        public string Status { get; set; } = "Não cancelado";
+        public decimal ValorTotalVenda { get; set; }
 
         /// <summary>
-        /// Cliente que realizou a venda.
+        /// Valor total dos produtos da venda
         /// </summary>
-        public Cliente Cliente { get; set; }
+        public decimal ValorTotalProdutos { get; set; }
 
         /// <summary>
-        /// Filial onde a venda foi realizada.
+        /// Status da venda (ex: não cancelada, cancelada)
         /// </summary>
-        public Filial Filial { get; set; }
+        public string Status { get; set; } = "Não cancelada";
+
+        /// <summary>
+        /// Data de cadastro da venda
+        /// </summary>
+        public DateTime DataCadastro { get; set; }
+
+        /// <summary>
+        /// Data de alteração da venda (opcional)
+        /// </summary>
+        public DateTime? DataAlteracao { get; set; }
+
+        /// <summary>
+        /// Relacionamento com a tabela ItensVenda
+        /// </summary>
+        public ICollection<ItemVenda> ItensVenda { get; set; } = new List<ItemVenda>();
+
+        // Método para calcular o valor total da venda a partir dos itens
+        public void CalcularValorTotal()
+        {
+            ValorTotalVenda = 0;
+            ValorTotalProdutos = 0;
+
+            foreach (var item in ItensVenda)
+            {
+                ValorTotalProdutos += item.ValorTotal;
+                ValorTotalVenda += item.ValorTotal;
+            }
+        }
+
+        /// <summary>
+        /// Inicializa uma nova instância da classe Venda
+        /// </summary>
+        public Venda()
+        {
+            DataCadastro = DateTime.UtcNow;
+            DataVenda = DateTime.UtcNow;
+        }
     }
 }

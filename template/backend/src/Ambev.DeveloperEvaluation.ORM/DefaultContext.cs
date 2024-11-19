@@ -9,10 +9,12 @@ namespace Ambev.DeveloperEvaluation.ORM
     public class DefaultContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Venda> Vendas { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Filial> Filiais { get; set; }
         public DbSet<Produto> Produtos { get; set; }
+        public DbSet<Venda> Vendas { get; set; }  // Adicionando a DbSet de Venda
+        public DbSet<ItemVenda> ItensVenda { get; set; } // Adicionando a DbSet de ItensVenda
+
 
         public DefaultContext(DbContextOptions<DefaultContext> options) : base(options)
         {
@@ -22,10 +24,14 @@ namespace Ambev.DeveloperEvaluation.ORM
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            // Garantir que User, Cliente e Filial mapeiem para tabelas separadas
+            // Configuração das tabelas
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<Cliente>().ToTable("Clientes");
             modelBuilder.Entity<Filial>().ToTable("Filiais");
+            modelBuilder.Entity<Produto>().ToTable("Produtos");
+            modelBuilder.Entity<Venda>().ToTable("Vendas");  // Configuração da tabela Venda
+            modelBuilder.Entity<ItemVenda>().ToTable("ItensVenda"); // Configuração da tabela ItensVenda
+
 
             // Configurando a relação entre Cliente e Filial
             modelBuilder.Entity<Cliente>()
@@ -60,21 +66,53 @@ namespace Ambev.DeveloperEvaluation.ORM
                 .Property(p => p.PrecoUnitario)
                 .HasColumnType("numeric(10,2)");
 
+            // Configuração do relacionamento entre Venda e ItensVenda
+            modelBuilder.Entity<ItemVenda>()
+                .HasOne(iv => iv.Venda)  // Relaciona o ItemVenda com a Venda
+                .WithMany(v => v.ItensVenda)  // Uma Venda pode ter muitos ItensVenda
+                .HasForeignKey(iv => iv.IdVenda)  // A chave estrangeira em ItemVenda é IdVenda
+                .OnDelete(DeleteBehavior.Cascade);  // Ao deletar uma Venda, os ItensVenda são deletados
+
+            // Configuração do relacionamento entre Produto e ItensVenda
+            //modelBuilder.Entity<ItemVenda>()
+            //    .HasOne(iv => iv.Produto)  // Relaciona o ItemVenda com o Produto
+            //    .WithMany()  // Um Produto pode ser relacionado a vários ItensVenda
+            //    .HasForeignKey(iv => iv.IdProduto)  // A chave estrangeira em ItemVenda é IdProduto
+            //    .OnDelete(DeleteBehavior.Restrict);  // Não permitir a exclusão de Produto se estiver vinculado a um ItemVenda
+
+            // Configuração da tabela Venda
             modelBuilder.Entity<Venda>()
-           .ToTable("Vendas")
-           .HasKey(v => v.Id);
+                .HasKey(v => v.Id);  // Definir a chave primária da Venda
+
+            // Configuração de outras propriedades da tabela Venda
+            modelBuilder.Entity<Venda>()
+                .Property(v => v.NumeroVenda)
+                .IsRequired()
+                .HasMaxLength(50);
 
             modelBuilder.Entity<Venda>()
-                .HasOne(v => v.Cliente)
-                .WithMany()
-                .HasForeignKey(v => v.IdCliente)
-                .OnDelete(DeleteBehavior.Restrict);  // Evitar deletar vendas quando cliente for excluído
+                .Property(v => v.ValorTotalVenda)
+                .HasColumnType("numeric(10,2)");
 
             modelBuilder.Entity<Venda>()
-                .HasOne(v => v.Filial)
-                .WithMany()
-                .HasForeignKey(v => v.IdFilial)
-                .OnDelete(DeleteBehavior.Restrict);  // Evitar deletar vendas quando filial for excluída
+                .Property(v => v.ValorTotalProdutos)
+                .HasColumnType("numeric(10,2)");
+
+            modelBuilder.Entity<Venda>()
+                .Property(v => v.Status)
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Venda>()
+                .Property(v => v.DataCadastro)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Venda>()
+                .Property(v => v.DataVenda)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            // Configuração da tabela ItemVenda
+            modelBuilder.Entity<ItemVenda>()
+                .HasKey(iv => iv.Id);  // Definir a chave primária de ItemVenda
 
             base.OnModelCreating(modelBuilder);
         }

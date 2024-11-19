@@ -5,6 +5,7 @@ using Ambev.DeveloperEvaluation.Application.Filiais.CreateFilial;
 using Ambev.DeveloperEvaluation.Application.Produtos.CreateProduto;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
+using Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
@@ -12,7 +13,10 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Clients.CreateCliente;
 using Ambev.DeveloperEvaluation.WebApi.Features.Filiais.CreateFilial;
 using Ambev.DeveloperEvaluation.WebApi.Features.Produtos.CreateProduto;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
+using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda;
 using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Mappings
 {
@@ -71,7 +75,19 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
                 .ForMember(dest => dest.Descricao, opt => opt.MapFrom(src => src.Descricao))
                 .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario));
 
+            // Configuração de mapeamento entre CreateVendaRequest e CreateVendaCommand
+            CreateMap<CreateVendaRequest, CreateVendaCommand>()
+                .ForMember(dest => dest.NumeroVenda, opt => opt.MapFrom(src => src.NumeroVenda))
+                .ForMember(dest => dest.IdCliente, opt => opt.MapFrom(src => src.IdCliente))
+                .ForMember(dest => dest.NomeCliente, opt => opt.MapFrom(src => src.NomeCliente))
+                .ForMember(dest => dest.IdFilial, opt => opt.MapFrom(src => src.IdFilial))
+                .ForMember(dest => dest.NomeFilial, opt => opt.MapFrom(src => src.NomeFilial))
+                .ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
+                .ForMember(dest => dest.ValorTotalProdutos, opt => opt.MapFrom(src => src.ValorTotalProdutos))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
+            CreateMap<CreateVendaResult, CreateVendaResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)); 
         }
 
     }

@@ -125,11 +125,6 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
 
 
 
-
-
-
-
-
         /// <summary>
         /// Retrieves a venda by its unique identifier
         /// </summary>

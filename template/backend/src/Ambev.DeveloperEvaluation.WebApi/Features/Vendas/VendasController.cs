@@ -12,6 +12,7 @@ using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.GetVenda;
 using Ambev.DeveloperEvaluation.Application.Vendas.GetVenda;
+using Ambev.DeveloperEvaluation.Application.Vendas.DeleteVenda;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
 {
@@ -231,26 +232,26 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
         }
 
 
-        // [HttpDelete("{id}")]
-        // [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
-        // [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        // public async Task<IActionResult> DeleteVenda([FromRoute] Guid id, CancellationToken cancellationToken)
-        // {
-        //     var command = new DeleteVendaCommand { Id = id };
-        //     var response = await _mediator.Send(command, cancellationToken);
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteVenda([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var command = new DeleteVendaCommand { Id = id };
+            var response = await _mediator.Send(command, cancellationToken);
 
-        //     if (response == null)
-        //         return NotFound(new ApiResponse
-        //         {
-        //             Success = false,
-        //             Message = "Sale not found"
-        //         });
+            if (response == null)
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Message = "Sale not found"
+                });
 
-        //     return Ok(new ApiResponse
-        //     {
-        //         Success = true,
-        //         Message = "Sale deleted successfully"
-        //     });
-        // }
+            return Ok(new ApiResponse
+            {
+                Success = true,
+                Message = "Sale deleted successfully"
+            });
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
 
         Task<Venda?> GetByNumeroVendaAsync(string numeroVenda, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Venda>> GetByProdutoIdAsync(Guid produtoId, CancellationToken cancellationToken = default);
+        //Task<IEnumerable<Venda>> GetByProdutoIdAsync(Guid produtoId, CancellationToken cancellationToken = default);
 
 
         /// <summary>

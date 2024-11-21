@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities
 {
@@ -11,12 +11,10 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
     /// </summary>
     public class Venda : BaseEntity
     {
-
         /// <summary>
         /// Número da venda
         /// </summary>
         public string NumeroVenda { get; set; } = string.Empty;
-
 
         /// <summary>
         /// Data da venda
@@ -34,16 +32,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public string NomeCliente { get; set; } = string.Empty;
 
         /// <summary>
-        /// Identificador do produto associado à venda
-        /// </summary>
-        public Guid IdProduto { get; set; }
-
-        /// <summary>
-        /// Nome do produto associado à venda
-        /// </summary>
-        public string NomeProduto { get; set; } = string.Empty;
-
-        /// <summary>
         /// Identificador da filial associada à venda
         /// </summary>
         public Guid IdFilial { get; set; }
@@ -52,7 +40,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// Nome da filial associada à venda
         /// </summary>
         public string NomeFilial { get; set; } = string.Empty;
-
 
         /// <summary>
         /// Valor total da venda
@@ -63,6 +50,11 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// Valor total dos produtos da venda
         /// </summary>
         public decimal ValorTotalProdutos { get; set; }
+
+        /// <summary>
+        /// Desconto da venda
+        /// </summary>
+        public decimal DescontoVenda { get; set; }
 
         /// <summary>
         /// Status da venda (ex: não cancelada, cancelada)
@@ -84,28 +76,33 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// </summary>
         public ICollection<ItemVenda> ItensVenda { get; set; } = new List<ItemVenda>();
 
-        // Método para calcular o valor total da venda a partir dos itens
+        /// <summary>
+        /// Método para calcular o valor total da venda a partir dos itens
+        /// </summary>
         public void CalcularValorTotal()
         {
+            // Inicializa as variáveis totais
             ValorTotalVenda = 0;
             ValorTotalProdutos = 0;
 
+            // Calculando os valores totais
             foreach (var item in ItensVenda)
             {
-                ValorTotalProdutos += item.ValorTotal;
-                ValorTotalVenda += item.ValorTotal;
+                ValorTotalProdutos += item.Quantidade * item.PrecoUnitario;  // Valor total dos produtos (sem desconto)
+                ValorTotalVenda += item.ValorTotal;  // Valor total considerando o desconto
             }
         }
-
-        public Produto Produto { get; set; } = null!;
 
         /// <summary>
         /// Inicializa uma nova instância da classe Venda
         /// </summary>
         public Venda()
         {
+            // Inicializando as datas de cadastro e venda com a data atual
             DataCadastro = DateTime.UtcNow;
             DataVenda = DateTime.UtcNow;
         }
+
+
     }
 }

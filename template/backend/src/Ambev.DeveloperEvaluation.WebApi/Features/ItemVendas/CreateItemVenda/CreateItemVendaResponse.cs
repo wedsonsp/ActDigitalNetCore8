@@ -10,7 +10,7 @@ public class CreateItemVendaResponse
     /// <summary>
     /// The unique identifier of the created sale item
     /// </summary>
-    public Guid IdVenda { get; set; }
+    //public Guid IdVenda { get; set; }
 
     public Guid IdProduto { get; set; }
 

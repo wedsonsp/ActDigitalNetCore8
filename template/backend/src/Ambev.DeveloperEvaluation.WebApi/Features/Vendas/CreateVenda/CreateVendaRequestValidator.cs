@@ -28,12 +28,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
                 .NotEmpty().WithMessage("Nome da filial é obrigatório.");
 
             // Valida que o ValorTotalVenda deve ser maior que zero
-            RuleFor(x => x.ValorTotalVenda)
-                .GreaterThan(0).WithMessage("Valor total da venda deve ser maior que zero.");
+            //RuleFor(x => x.ValorTotalVenda)
+            //    .GreaterThan(0).WithMessage("Valor total da venda deve ser maior que zero.");
 
             // Valida que o ValorTotalProdutos deve ser maior que zero
-            RuleFor(x => x.ValorTotalProdutos)
-                .GreaterThan(0).WithMessage("Valor total dos produtos deve ser maior que zero.");
+            //RuleFor(x => x.ValorTotalProdutos)
+            //    .GreaterThan(0).WithMessage("Valor total dos produtos deve ser maior que zero.");
 
             // Valida que o Status da venda seja válido
             RuleFor(x => x.Status)

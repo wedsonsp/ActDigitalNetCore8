@@ -92,9 +92,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                     b.Property<Guid>("IdProduto")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("IdVenda")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("NomeProduto")
                         .IsRequired()
                         .HasColumnType("text");
@@ -108,9 +105,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("numeric");
 
+                    b.Property<Guid>("VendaId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdVenda");
+                    b.HasIndex("VendaId");
 
                     b.ToTable("ItensVenda", (string)null);
                 });
@@ -210,13 +210,13 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                    b.Property<decimal>("DescontoVenda")
+                        .HasColumnType("numeric");
+
                     b.Property<Guid>("IdCliente")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("IdFilial")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("IdProduto")
                         .HasColumnType("uuid");
 
                     b.Property<string>("NomeCliente")
@@ -224,10 +224,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("NomeFilial")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("NomeProduto")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -256,7 +252,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                 {
                     b.HasOne("Ambev.DeveloperEvaluation.Domain.Entities.Venda", "Venda")
                         .WithMany("ItensVenda")
-                        .HasForeignKey("IdVenda")
+                        .HasForeignKey("VendaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

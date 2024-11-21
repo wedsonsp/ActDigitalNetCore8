@@ -63,11 +63,33 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 });
             }
 
-            // Mapeamento do comando com os itens de venda
+            // Mapeamento do comando
             CreateVendaCommand command;
             try
             {
                 command = _mapper.Map<CreateVendaCommand>(request);
+
+                // Atribuindo corretamente NomeProduto e Desconto
+                foreach (var item in command.ItensVenda)
+                {
+                    item.NomeProduto = request.ItensVenda
+                                               .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
+                                               .NomeProduto;
+                    item.Desconto = request.ItensVenda
+                                           .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
+                                           .Desconto ?? 0; // Se o desconto for nulo, atribui 0
+                }
+
+                // Calcular os valores de cada item
+                foreach (var item in command.ItensVenda)
+                {
+                    item.ValorTotal = item.Quantidade * item.PrecoUnitario;
+                }
+
+                // Calcular o valor total da venda
+                command.ValorTotalVenda = command.ItensVenda.Sum(item => item.ValorTotal);
+
+
             }
             catch (AutoMapperMappingException ex)
             {
@@ -98,6 +120,8 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 Data = _mapper.Map<CreateVendaResponse>(response)
             });
         }
+
+
 
         /// <summary>
         /// Gets the sale by its unique identifier (id).

@@ -8,10 +8,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
     /// </summary>
     public class ItemVenda : BaseEntity
     {
-        /// <summary>
-        /// Identificador da venda associada ao item
-        /// </summary>
-        public Guid IdVenda { get; set; }
 
         /// <summary>
         /// Identificador do produto associado ao item

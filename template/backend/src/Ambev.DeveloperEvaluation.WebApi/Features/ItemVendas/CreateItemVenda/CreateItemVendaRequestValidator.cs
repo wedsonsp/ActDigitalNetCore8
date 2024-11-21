@@ -22,7 +22,7 @@ public class CreateItemVendaRequestValidator : AbstractValidator<CreateItemVenda
     /// </remarks>
     public CreateItemVendaRequestValidator()
     {
-        RuleFor(item => item.IdVenda).NotEqual(Guid.Empty).WithMessage("O IdVenda é obrigatório.");
+        //RuleFor(item => item.IdVenda).NotEqual(Guid.Empty).WithMessage("O IdVenda é obrigatório.");
         RuleFor(item => item.IdProduto).NotEqual(Guid.Empty).WithMessage("O IdProduto é obrigatório.");
         RuleFor(item => item.NomeProduto).NotEmpty().Length(3, 100);
         RuleFor(item => item.Quantidade).GreaterThan(0);

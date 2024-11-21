@@ -1,15 +1,18 @@
 using Ambev.DeveloperEvaluation.Application;
 using Ambev.DeveloperEvaluation.Application.Clientes.CreateCliente;
 using Ambev.DeveloperEvaluation.Application.Clients.CreateCliente;
+using Ambev.DeveloperEvaluation.Application.ItemVendas.CreateItemVenda;
 using Ambev.DeveloperEvaluation.Common.HealthChecks;
 using Ambev.DeveloperEvaluation.Common.Logging;
 using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
+using Ambev.DeveloperEvaluation.Domain.Validation;
 using Ambev.DeveloperEvaluation.IoC;
 using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Ambev.DeveloperEvaluation.WebApi.Middleware;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -41,6 +44,11 @@ public class Program
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped<IVendaRepository, VendaRepository>();
             builder.Services.AddScoped<IItemVendaRepository, ItemVendaRepository>();
+            // Registrando o validador do comando
+            builder.Services.AddTransient<IValidator<CreateItemVendaCommand>, CreateItemVendaCommandValidator>();
+
+            builder.Services.AddScoped<CreateItemVendaCommandValidator>(); // Registrando o validador para DI
+
 
             builder.Services.AddDbContext<DefaultContext>(options =>
                 options.UseNpgsql(

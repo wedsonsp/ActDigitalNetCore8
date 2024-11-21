@@ -7,7 +7,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.ItemVendas.CreateItemVenda;
 /// </summary>
 public class CreateItemVendaRequest
 {
-    public Guid IdVenda { get; set; }
+    //public Guid IdVenda { get; set; }
 
     public Guid IdProduto { get; set; }
 

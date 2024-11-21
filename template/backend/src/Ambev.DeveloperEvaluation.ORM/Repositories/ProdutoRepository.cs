@@ -1,6 +1,9 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories
 {
@@ -13,23 +16,24 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             _context = context;
         }
 
+        // Método para obter um produto pelo ID
+        public async Task<Produto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Produto>()
+                                 .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);  // Usando o ID para buscar o produto
+        }
+
+        public async Task<Produto?> GetByNameAsync(string nome, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Produto>()
+                                 .FirstOrDefaultAsync(p => p.Nome.ToLower() == nome.ToLower(), cancellationToken);
+        }
+
         public async Task<Produto> CreateAsync(Produto produto, CancellationToken cancellationToken = default)
         {
             await _context.Set<Produto>().AddAsync(produto, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return produto;
-        }
-
-        public async Task<Produto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Produto>().FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
-        }
-
-        public async Task<Produto?> GetByNameAsync(string nome, CancellationToken cancellationToken = default)
-        {
-            // Alterado para usar ToLower() para comparação de strings sem considerar maiúsculas/minúsculas
-            return await _context.Set<Produto>()
-                .FirstOrDefaultAsync(p => p.Nome.ToLower() == nome.ToLower(), cancellationToken);
         }
 
         public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)

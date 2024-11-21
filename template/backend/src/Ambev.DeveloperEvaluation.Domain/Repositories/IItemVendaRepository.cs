@@ -33,7 +33,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// <param name="vendaId">O identificador da venda.</param>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>Uma lista de itens de venda para a venda especificada.</returns>
-        Task<IEnumerable<ItemVenda>> GetByVendaIdAsync(Guid vendaId, CancellationToken cancellationToken = default);
+        //Task<IEnumerable<ItemVenda>> GetByVendaIdAsync(Guid vendaId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Recupera todos os itens de venda associados a um produto específico.

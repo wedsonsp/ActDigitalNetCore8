@@ -57,13 +57,13 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <param name="vendaId">The unique identifier of the venda</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A list of item vendas for the venda</returns>
-        public async Task<IEnumerable<ItemVenda>> GetByVendaIdAsync(Guid vendaId, CancellationToken cancellationToken = default)
-        {
-            return await _context.ItensVenda
-                .Where(i => i.IdVenda == vendaId)
-                .Include(i => i.Venda)  // Assuming ItemVenda has a navigation property to Venda
-                .ToListAsync(cancellationToken);
-        }
+        //public async Task<IEnumerable<ItemVenda>> GetByVendaIdAsync(Guid vendaId, CancellationToken cancellationToken = default)
+        //{
+        //    return await _context.ItensVenda
+        //        .Where(i => i.IdVenda == vendaId)
+        //        .Include(i => i.Venda)  // Assuming ItemVenda has a navigation property to Venda
+        //        .ToListAsync(cancellationToken);
+        //}
 
         /// <summary>
         /// Retrieves all item vendas associated with a specific product

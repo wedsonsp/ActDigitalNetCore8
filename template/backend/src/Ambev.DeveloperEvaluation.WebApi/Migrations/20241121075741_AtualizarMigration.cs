@@ -87,12 +87,11 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                     DataVenda = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     IdCliente = table.Column<Guid>(type: "uuid", nullable: false),
                     NomeCliente = table.Column<string>(type: "text", nullable: false),
-                    IdProduto = table.Column<Guid>(type: "uuid", nullable: false),
-                    NomeProduto = table.Column<string>(type: "text", nullable: false),
                     IdFilial = table.Column<Guid>(type: "uuid", nullable: false),
                     NomeFilial = table.Column<string>(type: "text", nullable: false),
                     ValorTotalVenda = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
                     ValorTotalProdutos = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    DescontoVenda = table.Column<decimal>(type: "numeric", nullable: false),
                     Status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     DataAlteracao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -107,20 +106,20 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IdVenda = table.Column<Guid>(type: "uuid", nullable: false),
                     IdProduto = table.Column<Guid>(type: "uuid", nullable: false),
                     NomeProduto = table.Column<string>(type: "text", nullable: false),
                     Quantidade = table.Column<int>(type: "integer", nullable: false),
                     PrecoUnitario = table.Column<decimal>(type: "numeric", nullable: false),
                     Desconto = table.Column<decimal>(type: "numeric", nullable: false),
-                    ValorTotal = table.Column<decimal>(type: "numeric", nullable: false)
+                    ValorTotal = table.Column<decimal>(type: "numeric", nullable: false),
+                    VendaId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ItensVenda", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ItensVenda_Vendas_IdVenda",
-                        column: x => x.IdVenda,
+                        name: "FK_ItensVenda_Vendas_VendaId",
+                        column: x => x.VendaId,
                         principalTable: "Vendas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -133,9 +132,9 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItensVenda_IdVenda",
+                name: "IX_ItensVenda_VendaId",
                 table: "ItensVenda",
-                column: "IdVenda");
+                column: "VendaId");
         }
 
         /// <inheritdoc />

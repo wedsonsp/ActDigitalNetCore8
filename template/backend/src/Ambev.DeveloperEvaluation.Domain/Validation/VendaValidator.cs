@@ -19,8 +19,8 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation
                 .NotEmpty().WithMessage("Id do cliente é obrigatório.");
 
             // Validação do Cliente (IdCliente)
-            RuleFor(venda => venda.IdProduto)
-                .NotEmpty().WithMessage("Id do Produto é obrigatório.");
+            //RuleFor(venda => venda.IdProduto)
+            //    .NotEmpty().WithMessage("Id do Produto é obrigatório.");
 
             // Validação do Nome do Cliente
             RuleFor(venda => venda.NomeCliente)
@@ -37,8 +37,8 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation
                 .GreaterThan(0).WithMessage("Valor total da venda deve ser maior que zero.");
 
             // Validação do Valor Total dos Produtos
-            RuleFor(venda => venda.ValorTotalProdutos)
-                .GreaterThan(0).WithMessage("Valor total dos produtos deve ser maior que zero.");
+            //RuleFor(venda => venda.ValorTotalProdutos)
+            //    .GreaterThan(0).WithMessage("Valor total dos produtos deve ser maior que zero.");
 
             // Validação do Status da Venda
             RuleFor(venda => venda.Status)

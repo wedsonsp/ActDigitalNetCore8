@@ -60,11 +60,11 @@ namespace Ambev.DeveloperEvaluation.ORM
                 .HasColumnType("numeric(10,2)");
 
             // Configuração do relacionamento entre Venda e ItensVenda
-            modelBuilder.Entity<ItemVenda>()
-                .HasOne(iv => iv.Venda)  // Relaciona o ItemVenda com a Venda
-                .WithMany(v => v.ItensVenda)  // Uma Venda pode ter muitos ItensVenda
-                .HasForeignKey(iv => iv.IdVenda)  // A chave estrangeira em ItemVenda é IdVenda
-                .OnDelete(DeleteBehavior.Cascade);  // Ao deletar uma Venda, os ItensVenda são deletados
+            //modelBuilder.Entity<ItemVenda>()
+            //    .HasOne(iv => iv.Venda)  // Relaciona o ItemVenda com a Venda
+            //    .WithMany(v => v.ItensVenda)  // Uma Venda pode ter muitos ItensVenda
+            //    .HasForeignKey(iv => iv.IdVenda)  // A chave estrangeira em ItemVenda é IdVenda
+            //    .OnDelete(DeleteBehavior.Cascade);  // Ao deletar uma Venda, os ItensVenda são deletados
 
             // Configuração do relacionamento entre Produto e ItensVenda
             //modelBuilder.Entity<ItemVenda>()
@@ -110,10 +110,10 @@ namespace Ambev.DeveloperEvaluation.ORM
             modelBuilder.Entity<Venda>()
             .HasKey(v => v.Id);
 
-            modelBuilder.Entity<Venda>()
-                .HasOne(v => v.Produto)  // Relacionamento com a entidade Produto
-                .WithMany()  // Dependendo do relacionamento, ajuste isso
-                .HasForeignKey(v => v.IdProduto);  // Relacionamento com o campo IdProduto
+            //modelBuilder.Entity<Venda>()
+            //    .HasOne(v => v.Produto)  // Relacionamento com a entidade Produto
+            //    .WithMany()  // Dependendo do relacionamento, ajuste isso
+            //    .HasForeignKey(v => v.IdProduto);  // Relacionamento com o campo IdProduto
 
             base.OnModelCreating(modelBuilder);
         }

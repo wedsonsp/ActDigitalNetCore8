@@ -13,7 +13,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// <summary>
         /// Identificador único do produto.
         /// </summary>
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         /// <summary>
         /// Nome do produto.

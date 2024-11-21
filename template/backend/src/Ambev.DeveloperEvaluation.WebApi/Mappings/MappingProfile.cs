@@ -85,8 +85,8 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
                 .ForMember(dest => dest.NomeFilial, opt => opt.MapFrom(src => src.NomeFilial))
                 .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
                 .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto))
-                .ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
-                .ForMember(dest => dest.ValorTotalProdutos, opt => opt.MapFrom(src => src.ValorTotalProdutos))
+                //.ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
+                //.ForMember(dest => dest.ValorTotalProdutos, opt => opt.MapFrom(src => src.ValorTotalProdutos))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
             // Mapeamento entre CreateVendaResult e CreateVendaResponse

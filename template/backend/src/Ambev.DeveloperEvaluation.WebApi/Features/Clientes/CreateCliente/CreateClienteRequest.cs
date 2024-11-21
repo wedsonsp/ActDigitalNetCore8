@@ -11,8 +11,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Clients.CreateCliente;
 /// </summary>
 public class CreateClienteRequest
 {
-    public Guid IdCliente { get; set; }
-
     /// <summary>
     /// Gets or sets the name of the client. This field is required.
     /// </summary>
@@ -33,8 +31,4 @@ public class CreateClienteRequest
     /// </summary>
     public ClienteStatus Status { get; set; }
 
-    /// <summary>
-    /// Gets or sets the list of items for the client sale (optional, if you want to associate items directly with the client).
-    /// </summary>
-    public List<CreateItemVendaRequest> ItensVenda { get; set; } = new List<CreateItemVendaRequest>();
 }

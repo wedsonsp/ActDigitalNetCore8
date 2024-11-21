@@ -33,10 +33,97 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <returns>The created venda</returns>
         public async Task<Venda> CreateAsync(Venda venda, CancellationToken cancellationToken = default)
         {
+            // Evitar duplicação de itens de venda (agrupando por produto)
+            var itensVenda = venda.ItensVenda
+                                  .GroupBy(i => i.IdProduto)
+                                  .Select(g => g.First())  // Seleciona o primeiro item de cada grupo
+                                  .ToList();
+
+            // Verificar se algum item tem mais de 20 unidades
+            foreach (var item in itensVenda)
+            {
+                if (item.Quantidade > 20)
+                {
+                    throw new ArgumentException($"Não é permitido vender mais de 20 itens do produto {item.IdProduto}."); // Lançar exceção se exceder o limite
+                }
+            }
+
+            // Atribuir os itens filtrados à venda
+            venda.ItensVenda = itensVenda;
+
+            // Calcular o valor total de cada item e aplicar o desconto no item
+            foreach (var item in venda.ItensVenda)
+            {
+                item.ValorTotal = item.Quantidade * item.PrecoUnitario;
+
+                // Calcular o desconto do item, baseado na quantidade
+                item.Desconto = CalcularDesconto(item.Quantidade);  // Cálculo do desconto por item
+
+                // Subtrair o desconto do valor total do item
+                item.ValorTotal -= item.Desconto;
+            }
+
+            // Calcular o valor total dos produtos da venda (após os descontos nos itens)
+            venda.ValorTotalProdutos = venda.ItensVenda.Sum(item => item.ValorTotal);
+
+            // Calcular o desconto total para a venda com base no valor total dos itens
+            venda.DescontoVenda = CalcularDescontoVenda((int)venda.ValorTotalProdutos); // Calcular o desconto para a venda
+
+            // Calcular o valor total da venda (após o desconto total)
+            venda.ValorTotalVenda = venda.ValorTotalProdutos - venda.DescontoVenda;
+
+            // Salvar a venda no banco
             await _context.Vendas.AddAsync(venda, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+
             return venda;
         }
+
+
+
+
+
+        // Dentro do VendaRepository
+
+        private decimal CalcularDescontoVenda(int quantidade)
+        {
+            if (quantidade >= 10 && quantidade <= 20)
+            {
+                return 0.20m;  // 20% de desconto
+            }
+            else if (quantidade > 4)
+            {
+                return 0.10m;  // 10% de desconto
+            }
+            else
+            {
+                return 0.00m;  // Nenhum desconto
+            }
+        }
+
+
+        // Calcular a quantidade de cada item
+        private decimal CalcularDesconto(int quantidade)
+        {
+            // Lógica de cálculo do desconto baseado na quantidade
+            if (quantidade >= 10 && quantidade <= 20)
+            {
+                return 0.20m;  // 20% de desconto
+            }
+            else if (quantidade > 4)
+            {
+                return 0.10m;  // 10% de desconto
+            }
+            else
+            {
+                return 0.00m;  // Nenhum desconto
+            }
+        }
+
+
+
+
+
 
 
 
@@ -67,13 +154,13 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Venda>> GetByProdutoIdAsync(Guid produtoId, CancellationToken cancellationToken = default)
-        {
-            return await _context.Vendas
-                .Where(v => v.IdProduto == produtoId)  // Verificando o campo IdProduto
-                .Include(v => v.ItensVenda)  // Assumindo que ItensVenda é uma entidade relacionada
-                .ToListAsync(cancellationToken);
-        }
+        //public async Task<IEnumerable<Venda>> GetByProdutoIdAsync(Guid produtoId, CancellationToken cancellationToken = default)
+        //{
+        //    return await _context.Vendas
+        //        .Where(v => v.IdProduto == produtoId)  // Verificando o campo IdProduto
+        //        .Include(v => v.ItensVenda)  // Assumindo que ItensVenda é uma entidade relacionada
+        //        .ToListAsync(cancellationToken);
+        //}
 
         /// <summary>
         /// Retrieves all vendas associated with a specific filial

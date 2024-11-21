@@ -7,6 +7,7 @@ using Ambev.DeveloperEvaluation.Application.Produtos.CreateProduto;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
 using Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda;
+using Ambev.DeveloperEvaluation.Application.Vendas.GetVenda;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
@@ -15,6 +16,7 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Filiais.CreateFilial;
 using Ambev.DeveloperEvaluation.WebApi.Features.Produtos.CreateProduto;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
 using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda;
+using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.GetVenda;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -86,7 +88,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
                 .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
                 .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto))
                 //.ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
-                //.ForMember(dest => dest.ValorTotalProdutos, opt => opt.MapFrom(src => src.ValorTotalProdutos))
+                //.ForMember(dest => dest.ValorTotalVendaDesconto, opt => opt.MapFrom(src => src.ValorTotalVendaDesconto))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
             // Mapeamento entre CreateVendaResult e CreateVendaResponse
@@ -95,7 +97,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
                 .ForMember(dest => dest.NumeroVenda, opt => opt.MapFrom(src => src.NumeroVenda))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
-                .ForMember(dest => dest.ValorTotalProdutos, opt => opt.MapFrom(src => src.ValorTotalProdutos));
+                .ForMember(dest => dest.ValorTotalVendaDesconto, opt => opt.MapFrom(src => src.ValorTotalVendaDesconto));
 
 
             CreateMap<CreateItemVendaCommand, Domain.Entities.ItemVenda>()
@@ -106,10 +108,67 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
 
             // Mapeamento da venda
             CreateMap<Venda, CreateVendaResponse>()
+                .ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
                 .ForMember(dest => dest.ItensVenda, opt => opt.MapFrom(src => src.ItensVenda)); // Mapeia os itens de venda
 
+            
+            
+
+            // Mapeamento de Venda para GetVendaResult
+            CreateMap<Venda, GetVendaResult>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => MapStatusVenda(src.Status))) // Chama o método auxiliar
+                .ForMember(dest => dest.ItensVenda, opt => opt.MapFrom(src => src.ItensVenda));
+
+            // Mapeamento entre ItemVenda e SaleItem
+            CreateMap<Domain.Entities.ItemVenda, SaleItem>()
+                .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto))
+                .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
+                .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade))
+                .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario));
+
+            // Mapeamento de GetVendaResult para GetVendaResponse
+            CreateMap<GetVendaResult, GetVendaResponse>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.NomeCliente, opt => opt.MapFrom(src => src.NomeCliente))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
+                .ForMember(dest => dest.ItensVenda, opt => opt.MapFrom(src => src.ItensVenda))
+                .ForMember(dest => dest.DescontoVenda, opt => opt.MapFrom(src => src.DescontoVenda))
+                .ForMember(dest => dest.DataCadastro, opt => opt.MapFrom(src => src.DataCadastro))
+                .ForMember(dest => dest.ValorTotalVendaDesconto, opt => opt.MapFrom(src => src.ValorTotalVendaDesconto)); // Mapear a lista de itens de venda
+
+
+            // Mapeamento entre ItemVenda e SaleItem (certifique-se de que isso esteja correto)
+            CreateMap<Domain.Entities.ItemVenda, SaleItem>()
+                .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
+                .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto))
+                .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade))
+                .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario));
+
+            // Mapeamento entre SaleItem e VendaItemResponse
+            CreateMap<SaleItem, GetVendaItemResponse>()
+                .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
+                .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto))
+                .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade))
+                .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario)); 
 
         }
+
+        // Método auxiliar para mapear o status da venda
+        private VendaStatus MapStatusVenda(string status)
+        {
+            // Tenta fazer o parse do status (caso seja válido)
+            if (Enum.IsDefined(typeof(VendaStatus), status))
+            {
+                return (VendaStatus)Enum.Parse(typeof(VendaStatus), status);
+            }
+
+            // Retorna um valor default se o parse falhar
+            return VendaStatus.NaoCancelada; // Ou outro valor padrão
+        }
+
+
+  
 
     }
 }

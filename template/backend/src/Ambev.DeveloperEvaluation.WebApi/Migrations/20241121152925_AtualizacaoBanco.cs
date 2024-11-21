@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ambev.DeveloperEvaluation.WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class AtualizarMigration : Migration
+    public partial class AtualizacaoBanco : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -90,7 +90,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                     IdFilial = table.Column<Guid>(type: "uuid", nullable: false),
                     NomeFilial = table.Column<string>(type: "text", nullable: false),
                     ValorTotalVenda = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    ValorTotalProdutos = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
+                    ValorTotalVendaDesconto = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
                     DescontoVenda = table.Column<decimal>(type: "numeric", nullable: false),
                     Status = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),

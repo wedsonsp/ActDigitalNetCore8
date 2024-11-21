@@ -64,13 +64,16 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             }
 
             // Calcular o valor total dos produtos da venda (após os descontos nos itens)
-            venda.ValorTotalProdutos = venda.ItensVenda.Sum(item => item.ValorTotal);
+            venda.ValorTotalVendaDesconto = venda.ItensVenda.Sum(item => item.ValorTotal);
 
             // Calcular o desconto total para a venda com base no valor total dos itens
-            venda.DescontoVenda = CalcularDescontoVenda((int)venda.ValorTotalProdutos); // Calcular o desconto para a venda
+            venda.DescontoVenda = CalcularDescontoVenda((int)venda.ValorTotalVendaDesconto); // Calcular o desconto para a venda
 
             // Calcular o valor total da venda (após o desconto total)
-            venda.ValorTotalVenda = venda.ValorTotalProdutos - venda.DescontoVenda;
+            venda.ValorTotalVenda = venda.ValorTotalVendaDesconto - venda.DescontoVenda;
+
+            //Data de criação da venda
+            venda.DataCadastro = DateTime.UtcNow;
 
             // Salvar a venda no banco
             await _context.Vendas.AddAsync(venda, cancellationToken);

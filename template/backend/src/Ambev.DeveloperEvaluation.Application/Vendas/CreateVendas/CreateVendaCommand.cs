@@ -66,9 +66,9 @@ namespace Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda
         public decimal ValorTotalVenda { get; set; }
 
         /// <summary>
-        /// Gets or sets the total value of products in the sale (ValorTotalProdutos).
+        /// Gets or sets the total value of products in the sale (ValorTotalVendaDesconto).
         /// </summary>
-        public decimal ValorTotalProdutos { get; set; }
+        public decimal ValorTotalVendaDesconto { get; set; }
 
         /// <summary>
         /// Gets or sets the status of the sale (Status).

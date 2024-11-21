@@ -33,7 +33,7 @@ namespace Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda
         /// Gets or sets the total value of the products in the sale (venda).
         /// </summary>
         /// <value>The total value of the products, excluding any additional fees or discounts.</value>
-        public decimal ValorTotalProdutos { get; set; }
+        public decimal ValorTotalVendaDesconto { get; set; }
 
         /// <summary>
         /// Gets or sets the status of the sale (venda).

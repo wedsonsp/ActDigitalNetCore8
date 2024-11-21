@@ -15,6 +15,7 @@ using Ambev.DeveloperEvaluation.WebApi.Middleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
 using Serilog;
 using System.Reflection;
 
@@ -57,6 +58,14 @@ public class Program
                 )
             );
 
+            builder.Services.AddControllers()
+            .AddNewtonsoftJson(options =>
+            {
+                // Usando conversor para garantir o formato de data
+                options.SerializerSettings.Converters.Add(new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-ddTHH:mm:ss" });
+            });
+
+            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddJwtAuthentication(builder.Configuration);
 
             builder.RegisterDependencies();

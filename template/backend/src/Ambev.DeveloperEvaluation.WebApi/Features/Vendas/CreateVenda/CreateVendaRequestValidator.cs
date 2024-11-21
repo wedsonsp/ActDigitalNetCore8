@@ -31,8 +31,8 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
             //RuleFor(x => x.ValorTotalVenda)
             //    .GreaterThan(0).WithMessage("Valor total da venda deve ser maior que zero.");
 
-            // Valida que o ValorTotalProdutos deve ser maior que zero
-            //RuleFor(x => x.ValorTotalProdutos)
+            // Valida que o ValorTotalVendaDesconto deve ser maior que zero
+            //RuleFor(x => x.ValorTotalVendaDesconto)
             //    .GreaterThan(0).WithMessage("Valor total dos produtos deve ser maior que zero.");
 
             // Valida que o Status da venda seja válido

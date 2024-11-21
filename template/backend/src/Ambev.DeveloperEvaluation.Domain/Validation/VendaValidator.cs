@@ -37,7 +37,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation
                 .GreaterThan(0).WithMessage("Valor total da venda deve ser maior que zero.");
 
             // Validação do Valor Total dos Produtos
-            //RuleFor(venda => venda.ValorTotalProdutos)
+            //RuleFor(venda => venda.ValorTotalVendaDesconto)
             //    .GreaterThan(0).WithMessage("Valor total dos produtos deve ser maior que zero.");
 
             // Validação do Status da Venda

@@ -49,7 +49,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// <summary>
         /// Valor total dos produtos da venda
         /// </summary>
-        public decimal ValorTotalProdutos { get; set; }
+        public decimal ValorTotalVendaDesconto { get; set; }
 
         /// <summary>
         /// Desconto da venda
@@ -83,12 +83,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         {
             // Inicializa as variáveis totais
             ValorTotalVenda = 0;
-            ValorTotalProdutos = 0;
+            ValorTotalVendaDesconto = 0;
 
             // Calculando os valores totais
             foreach (var item in ItensVenda)
             {
-                ValorTotalProdutos += item.Quantidade * item.PrecoUnitario;  // Valor total dos produtos (sem desconto)
+                ValorTotalVendaDesconto += item.Quantidade * item.PrecoUnitario;  // Valor total dos produtos (sem desconto)
                 ValorTotalVenda += item.ValorTotal;  // Valor total considerando o desconto
             }
         }

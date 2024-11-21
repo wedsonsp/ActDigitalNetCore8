@@ -88,7 +88,7 @@ namespace Ambev.DeveloperEvaluation.ORM
                 .HasColumnType("numeric(10,2)");
 
             modelBuilder.Entity<Venda>()
-                .Property(v => v.ValorTotalProdutos)
+                .Property(v => v.ValorTotalVendaDesconto)
                 .HasColumnType("numeric(10,2)");
 
             modelBuilder.Entity<Venda>()

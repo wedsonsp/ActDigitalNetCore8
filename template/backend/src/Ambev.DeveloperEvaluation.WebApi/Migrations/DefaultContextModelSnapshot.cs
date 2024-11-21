@@ -237,10 +237,10 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<decimal>("ValorTotalProdutos")
+                    b.Property<decimal>("ValorTotalVenda")
                         .HasColumnType("numeric(10,2)");
 
-                    b.Property<decimal>("ValorTotalVenda")
+                    b.Property<decimal>("ValorTotalVendaDesconto")
                         .HasColumnType("numeric(10,2)");
 
                     b.HasKey("Id");

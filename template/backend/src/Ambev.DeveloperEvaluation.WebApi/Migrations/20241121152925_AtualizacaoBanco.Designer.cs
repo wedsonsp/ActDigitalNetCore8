@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ambev.DeveloperEvaluation.WebApi.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20241121075741_AtualizarMigration")]
-    partial class AtualizarMigration
+    [Migration("20241121152925_AtualizacaoBanco")]
+    partial class AtualizacaoBanco
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,10 +240,10 @@ namespace Ambev.DeveloperEvaluation.WebApi.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<decimal>("ValorTotalProdutos")
+                    b.Property<decimal>("ValorTotalVenda")
                         .HasColumnType("numeric(10,2)");
 
-                    b.Property<decimal>("ValorTotalVenda")
+                    b.Property<decimal>("ValorTotalVendaDesconto")
                         .HasColumnType("numeric(10,2)");
 
                     b.HasKey("Id");

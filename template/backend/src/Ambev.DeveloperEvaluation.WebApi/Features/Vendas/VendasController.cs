@@ -10,6 +10,8 @@ using System.Threading;
 using Microsoft.AspNetCore.Http;
 using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.GetVenda;
+using Ambev.DeveloperEvaluation.Application.Vendas.GetVenda;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
 {
@@ -122,7 +124,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
         }
 
 
-
         /// <summary>
         /// Gets the sale by its unique identifier (id).
         /// </summary>
@@ -167,29 +168,68 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
         }
 
 
-        // Descomente e implemente os métodos de recuperação e exclusão de venda se necessário.
-        // [HttpGet("{id}")]
-        // [ProducesResponseType(typeof(ApiResponseWithData<GetVendaResponse>), StatusCodes.Status200OK)]
-        // [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        // public async Task<IActionResult> GetVenda([FromRoute] Guid id, CancellationToken cancellationToken)
-        // {
-        //     var command = new GetVendaCommand { Id = id };
-        //     var response = await _mediator.Send(command, cancellationToken);
 
-        //     if (response == null)
-        //         return NotFound(new ApiResponse
-        //         {
-        //             Success = false,
-        //             Message = "Sale not found"
-        //         });
+        //[HttpGet("{id}")]
+        //[ProducesResponseType(typeof(ApiResponseWithData<GetVendaResponse>), StatusCodes.Status200OK)]
+        //[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        //public async Task<IActionResult> GetVenda([FromRoute] Guid id, CancellationToken cancellationToken)
+        //{
+        //    var request = new GetVendaRequest { Id = id };
+        //    var validator = new GetVendaRequestValidator();
+        //    var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
-        //     return Ok(new ApiResponseWithData<GetVendaResponse>
-        //     {
-        //         Success = true,
-        //         Message = "Sale retrieved successfully",
-        //         Data = _mapper.Map<GetVendaResponse>(response)
-        //     });
-        // }
+        //    if (!validationResult.IsValid)
+        //        return BadRequest(validationResult.Errors);
+
+        //    var command = _mapper.Map<GetVendaCommand>(request.Id);
+        //    var response = await _mediator.Send(command, cancellationToken);
+
+        //    return Ok(new ApiResponseWithData<GetVendaResponse>
+        //    {
+        //        Success = true,
+        //        Message = "Client retrieved successfully",
+        //        Data = _mapper.Map<GetVendaResponse>(response)
+        //    });
+        //}
+
+        /// <summary>
+        /// Retrieves a sale by its ID
+        /// </summary>
+        /// <param name="id">The unique identifier of the sale</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The sale details if found</returns>
+        [HttpGet("details/{id}")]
+        [ProducesResponseType(typeof(ApiResponseWithData<GetVendaResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetVenda([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            // Criando a requisição para obter a venda
+            var request = new GetVendaRequest { Id = id };
+
+            // Validação da requisição
+            var validator = new GetVendaRequestValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            // Mapeando para o comando GetVendaCommand
+            var command = _mapper.Map<GetVendaCommand>(request.Id);
+
+            // Enviando o comando e aguardando a resposta
+            var response = await _mediator.Send(command, cancellationToken);
+
+            // Retornando a resposta com os dados da venda
+            return Ok(new ApiResponseWithData<GetVendaResponse>
+            {
+                Success = true,
+                Message = "Sale retrieved successfully",
+                Data = _mapper.Map<GetVendaResponse>(response)
+            });
+        }
+
 
         // [HttpDelete("{id}")]
         // [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status200OK)]

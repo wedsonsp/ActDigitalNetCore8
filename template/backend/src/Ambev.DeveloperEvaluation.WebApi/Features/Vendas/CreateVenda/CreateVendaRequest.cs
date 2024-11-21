@@ -56,7 +56,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
         /// <summary>
         /// Gets or sets the total value of the products (without discounts).
         /// </summary>
-        //public decimal ValorTotalProdutos { get; set; }
+        //public decimal ValorTotalVendaDesconto { get; set; }
 
         /// <summary>
         /// Gets or sets the status of the sale (e.g., "Not Cancelled" or "Cancelled").

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ambev.DeveloperEvaluation.WebApi.Features.ItemVendas.CreateItemVenda;
+using System;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
 {
@@ -38,6 +39,16 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
         public string NomeFilial { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets or sets the unique identifier of the client for the sale.
+        /// </summary>
+        public Guid IdProduto { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the client. This is an additional field for easier querying.
+        /// </summary>
+        public string NomeProduto { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets the total value of the sale.
         /// </summary>
         public decimal ValorTotalVenda { get; set; }
@@ -63,8 +74,8 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
         public DateTime? DataAlteracao { get; set; }
 
         /// <summary>
-        /// Gets or sets the items involved in the sale, represented as a JSON string.
+        /// Gets or sets the list of items in the sale (ItensVenda).
         /// </summary>
-        public string ItensVenda { get; set; } = string.Empty;
+        public List<CreateItemVendaResponse> ItensVenda { get; set; } = new List<CreateItemVendaResponse>();
     }
 }

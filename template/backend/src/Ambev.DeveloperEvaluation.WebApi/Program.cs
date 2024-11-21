@@ -40,6 +40,7 @@ public class Program
             builder.Services.AddScoped<IFilialRepository, FilialRepository>();
             builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
             builder.Services.AddScoped<IVendaRepository, VendaRepository>();
+            builder.Services.AddScoped<IItemVendaRepository, ItemVendaRepository>();
 
             builder.Services.AddDbContext<DefaultContext>(options =>
                 options.UseNpgsql(

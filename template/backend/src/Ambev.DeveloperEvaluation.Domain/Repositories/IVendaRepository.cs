@@ -45,6 +45,8 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
 
         Task<Venda?> GetByNumeroVendaAsync(string numeroVenda, CancellationToken cancellationToken = default);
 
+        Task<IEnumerable<Venda>> GetByProdutoIdAsync(Guid produtoId, CancellationToken cancellationToken = default);
+
 
         /// <summary>
         /// Retrieves all vendas
@@ -68,5 +70,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>True if the venda was deleted, false if not found</returns>
         Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+        Task<Venda?> GetVendaByIdAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

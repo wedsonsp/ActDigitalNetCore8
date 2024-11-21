@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
 using Ambev.DeveloperEvaluation.Common.Validation;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
 {
@@ -44,15 +45,14 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateVenda([FromBody] CreateVendaRequest request, CancellationToken cancellationToken)
         {
-            // Validação da requisição usando FluentValidation
+            // Validação da requisição
             var validator = new CreateVendaRequestValidator();
             var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
             if (!validationResult.IsValid)
             {
-                // Mapeia os erros de validação para o tipo ValidationErrorDetail
                 var errorDetails = validationResult.Errors
-                    .Select(e => (ValidationErrorDetail)e)  // Usando o operador de conversão explícito
+                    .Select(e => (ValidationErrorDetail)e)
                     .ToList();
 
                 return BadRequest(new ApiResponse
@@ -63,7 +63,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 });
             }
 
-            // Mapeamento da requisição para o comando usando AutoMapper
+            // Mapeamento do comando com os itens de venda
             CreateVendaCommand command;
             try
             {
@@ -71,7 +71,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
             }
             catch (AutoMapperMappingException ex)
             {
-                // Caso ocorra erro no AutoMapper, retorne um erro adequado
                 return BadRequest(new ApiResponse
                 {
                     Success = false,
@@ -80,7 +79,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 });
             }
 
-            // Envio do comando através do MediatR
+            // Envio do comando
             var response = await _mediator.Send(command, cancellationToken);
 
             if (response == null)
@@ -99,6 +98,50 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 Data = _mapper.Map<CreateVendaResponse>(response)
             });
         }
+
+        /// <summary>
+        /// Gets the sale by its unique identifier (id).
+        /// </summary>
+        /// <param name="id">The unique identifier of the sale</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The sale details along with its items</returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ApiResponseWithData<CreateVendaResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetVendaByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            // Recupera a venda pelo ID, incluindo os itens
+            var venda = await _mediator.Send(new GetVendaByIdQuery(id), cancellationToken);
+
+            if (venda == null)
+            {
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Message = "Sale not found"
+                });
+            }
+
+            // Retorna a venda com os itens
+            var vendaResponse = _mapper.Map<CreateVendaResponse>(venda);
+            return Ok(new ApiResponseWithData<CreateVendaResponse>
+            {
+                Success = true,
+                Message = "Sale found successfully",
+                Data = vendaResponse
+            });
+        }
+
+        public class GetVendaByIdQuery : IRequest<Venda>
+        {
+            public Guid Id { get; }
+
+            public GetVendaByIdQuery(Guid id)
+            {
+                Id = id;
+            }
+        }
+
 
         // Descomente e implemente os métodos de recuperação e exclusão de venda se necessário.
         // [HttpGet("{id}")]

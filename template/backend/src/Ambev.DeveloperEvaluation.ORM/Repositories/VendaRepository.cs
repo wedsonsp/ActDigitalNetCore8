@@ -38,6 +38,8 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             return venda;
         }
 
+
+
         /// <summary>
         /// Retrieves a venda by its unique identifier
         /// </summary>
@@ -65,6 +67,14 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
                 .ToListAsync(cancellationToken);
         }
 
+        public async Task<IEnumerable<Venda>> GetByProdutoIdAsync(Guid produtoId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Vendas
+                .Where(v => v.IdProduto == produtoId)  // Verificando o campo IdProduto
+                .Include(v => v.ItensVenda)  // Assumindo que ItensVenda é uma entidade relacionada
+                .ToListAsync(cancellationToken);
+        }
+
         /// <summary>
         /// Retrieves all vendas associated with a specific filial
         /// </summary>
@@ -78,6 +88,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
                 .Include(v => v.ItensVenda)  // Assuming ItensVenda is a related entity
                 .ToListAsync(cancellationToken);
         }
+
 
         /// <summary>
         /// Retrieves a venda by its unique number
@@ -133,5 +144,15 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
+
+        // Renomeando para evitar ambiguidade
+        public async Task<Venda?> GetVendaByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Vendas
+                .Include(v => v.ItensVenda)  // Incluindo os itens da venda
+                .FirstOrDefaultAsync(v => v.Id == id, cancellationToken);
+        }
+
+
     }
 }

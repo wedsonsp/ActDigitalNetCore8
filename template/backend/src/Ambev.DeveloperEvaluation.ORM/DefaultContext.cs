@@ -33,13 +33,6 @@ namespace Ambev.DeveloperEvaluation.ORM
             modelBuilder.Entity<ItemVenda>().ToTable("ItensVenda"); // Configuração da tabela ItensVenda
 
 
-            // Configurando a relação entre Cliente e Filial
-            modelBuilder.Entity<Cliente>()
-                .HasOne(c => c.Filial)  // Um cliente tem uma filial
-                .WithMany()  // Muitas filiais podem ter muitos clientes
-                .HasForeignKey(c => c.FilialId)  // A chave estrangeira é FilialId
-                .OnDelete(DeleteBehavior.SetNull);  // Se a filial for deletada, setar o FilialId como null
-
             // Garantir que o nome da filial seja comparado de forma insensível a maiúsculas/minúsculas
             modelBuilder.Entity<Filial>()
                 .HasIndex(f => f.Nome)
@@ -113,6 +106,14 @@ namespace Ambev.DeveloperEvaluation.ORM
             // Configuração da tabela ItemVenda
             modelBuilder.Entity<ItemVenda>()
                 .HasKey(iv => iv.Id);  // Definir a chave primária de ItemVenda
+
+            modelBuilder.Entity<Venda>()
+            .HasKey(v => v.Id);
+
+            modelBuilder.Entity<Venda>()
+                .HasOne(v => v.Produto)  // Relacionamento com a entidade Produto
+                .WithMany()  // Dependendo do relacionamento, ajuste isso
+                .HasForeignKey(v => v.IdProduto);  // Relacionamento com o campo IdProduto
 
             base.OnModelCreating(modelBuilder);
         }

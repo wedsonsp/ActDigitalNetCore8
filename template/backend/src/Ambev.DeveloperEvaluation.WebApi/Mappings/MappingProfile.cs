@@ -2,6 +2,7 @@
 using Ambev.DeveloperEvaluation.Application.Clientes.CreateCliente;
 using Ambev.DeveloperEvaluation.Application.Filiais;
 using Ambev.DeveloperEvaluation.Application.Filiais.CreateFilial;
+using Ambev.DeveloperEvaluation.Application.ItemVendas.CreateItemVenda;
 using Ambev.DeveloperEvaluation.Application.Produtos.CreateProduto;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
@@ -82,12 +83,32 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
                 .ForMember(dest => dest.NomeCliente, opt => opt.MapFrom(src => src.NomeCliente))
                 .ForMember(dest => dest.IdFilial, opt => opt.MapFrom(src => src.IdFilial))
                 .ForMember(dest => dest.NomeFilial, opt => opt.MapFrom(src => src.NomeFilial))
+                .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
+                .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto))
                 .ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
                 .ForMember(dest => dest.ValorTotalProdutos, opt => opt.MapFrom(src => src.ValorTotalProdutos))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
+            // Mapeamento entre CreateVendaResult e CreateVendaResponse
             CreateMap<CreateVendaResult, CreateVendaResponse>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)); 
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.NumeroVenda, opt => opt.MapFrom(src => src.NumeroVenda))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.ValorTotalVenda, opt => opt.MapFrom(src => src.ValorTotalVenda))
+                .ForMember(dest => dest.ValorTotalProdutos, opt => opt.MapFrom(src => src.ValorTotalProdutos));
+
+
+            CreateMap<CreateItemVendaCommand, Domain.Entities.ItemVenda>()
+            .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto))
+            .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
+            .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade))
+            .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario));
+
+            // Mapeamento da venda
+            CreateMap<Venda, CreateVendaResponse>()
+                .ForMember(dest => dest.ItensVenda, opt => opt.MapFrom(src => src.ItensVenda)); // Mapeia os itens de venda
+
+
         }
 
     }

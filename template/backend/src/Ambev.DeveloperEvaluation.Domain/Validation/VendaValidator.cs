@@ -18,6 +18,10 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation
             RuleFor(venda => venda.IdCliente)
                 .NotEmpty().WithMessage("Id do cliente é obrigatório.");
 
+            // Validação do Cliente (IdCliente)
+            RuleFor(venda => venda.IdProduto)
+                .NotEmpty().WithMessage("Id do Produto é obrigatório.");
+
             // Validação do Nome do Cliente
             RuleFor(venda => venda.NomeCliente)
                 .NotEmpty().WithMessage("Nome do cliente é obrigatório.")
@@ -27,10 +31,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation
             RuleFor(venda => venda.IdFilial)
                 .NotEmpty().WithMessage("Id da filial é obrigatório.");
 
-            // Validação do Nome da Filial
-            RuleFor(venda => venda.NomeFilial)
-                .NotEmpty().WithMessage("Nome da filial é obrigatório.")
-                .MaximumLength(255).WithMessage("Nome da filial não pode ter mais de 255 caracteres.");
 
             // Validação do Valor Total da Venda
             RuleFor(venda => venda.ValorTotalVenda)

@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Common.Validation;
+﻿using Ambev.DeveloperEvaluation.Application.ItemVendas.CreateItemVenda;
+using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using MediatR;
 using System;
@@ -50,6 +51,16 @@ namespace Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda
         public string NomeFilial { get; set; } = string.Empty;
 
         /// <summary>
+        /// Gets or sets the unique identifier of the produto for the sale.
+        /// </summary>
+        public Guid IdProduto { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the client. This is an additional field for easier querying.
+        /// </summary>
+        public string NomeProduto { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets the total value of the sale (ValorTotalVenda).
         /// </summary>
         public decimal ValorTotalVenda { get; set; }
@@ -78,6 +89,9 @@ namespace Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda
         /// Gets or sets the date and time of the last update of the sale (DataAlteracao).
         /// </summary>
         public DateTime? DataAlteracao { get; set; }
+
+        // Aqui está a propriedade ItensVenda que foi adicionada
+        public List<CreateItemVendaCommand> ItensVenda { get; set; } = new List<CreateItemVendaCommand>();
 
         /// <summary>
         /// Validates the CreateVendaCommand.

@@ -11,10 +11,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
     /// </summary>
     public class Venda : BaseEntity
     {
+
         /// <summary>
         /// Número da venda
         /// </summary>
         public string NumeroVenda { get; set; } = string.Empty;
+
 
         /// <summary>
         /// Data da venda
@@ -32,6 +34,16 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         public string NomeCliente { get; set; } = string.Empty;
 
         /// <summary>
+        /// Identificador do produto associado à venda
+        /// </summary>
+        public Guid IdProduto { get; set; }
+
+        /// <summary>
+        /// Nome do produto associado à venda
+        /// </summary>
+        public string NomeProduto { get; set; } = string.Empty;
+
+        /// <summary>
         /// Identificador da filial associada à venda
         /// </summary>
         public Guid IdFilial { get; set; }
@@ -40,6 +52,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// Nome da filial associada à venda
         /// </summary>
         public string NomeFilial { get; set; } = string.Empty;
+
 
         /// <summary>
         /// Valor total da venda
@@ -83,6 +96,8 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
                 ValorTotalVenda += item.ValorTotal;
             }
         }
+
+        public Produto Produto { get; set; } = null!;
 
         /// <summary>
         /// Inicializa uma nova instância da classe Venda

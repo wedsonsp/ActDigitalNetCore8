@@ -1,4 +1,5 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.WebApi.Features.ItemVendas.CreateItemVenda;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
 {
@@ -7,10 +8,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
     /// </summary>
     public class CreateVendaRequest
     {
-        /// <summary>
-        /// Gets or sets the unique identifier of the client for the sale.
-        /// </summary>
-        public Guid IdCliente { get; set; }
 
         /// <summary>
         /// Gets or sets the sale number. This field is required.
@@ -23,14 +20,33 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
         public Guid IdFilial { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the branch (Filial). This is an additional field for easier querying.
+        /// </summary>
+        public string NomeFilial { get; set; } = string.Empty;
+
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the client for the sale.
+        /// </summary>
+        public Guid IdProduto { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the client. This is an additional field for easier querying.
+        /// </summary>
+        public string NomeProduto { get; set; } = string.Empty;
+
+
+        /// <summary>
+        /// Gets or sets the unique identifier of the client for the sale.
+        /// </summary>
+        public Guid IdCliente { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the client. This is an additional field for easier querying.
         /// </summary>
         public string NomeCliente { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Gets or sets the name of the branch (Filial). This is an additional field for easier querying.
-        /// </summary>
-        public string NomeFilial { get; set; } = string.Empty;
+     
 
         /// <summary>
         /// Gets or sets the total value of the sale.
@@ -51,7 +67,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
         /// Gets or sets the list of sale items represented in JSON format.
         /// </summary>
         // Lista de itens de venda diretamente aqui
-        public string ItensVenda { get; set; }  // Caso ainda queira lidar com isso de outra forma
+        public List<CreateItemVendaRequest> ItensVenda { get; set; } = new List<CreateItemVendaRequest>();
 
         /// <summary>
         /// Gets or sets the sale creation date (optional).
@@ -63,6 +79,9 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
         /// </summary>
         public DateTime? DataAlteracao { get; set; }
 
+        
+
+
     }
 
     public class ItemVenda
@@ -70,5 +89,16 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
         public Guid IdProduto { get; set; }
         public int Quantidade { get; set; }
         public decimal PrecoUnitario { get; set; }
+    }
+
+    public class ItemVendaRequest
+    {
+        public Guid IdVenda { get; set; }
+        public Guid IdProduto { get; set; }
+        public string NomeProduto { get; set; } = string.Empty;
+        public int Quantidade { get; set; }
+        public decimal PrecoUnitario { get; set; }
+        public decimal Desconto { get; set; }
+        public int Status { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda
+﻿using Ambev.DeveloperEvaluation.Application.ItemVendas.CreateItemVenda;
+
+namespace Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda
 {
     /// <summary>
     /// Represents the response returned after successfully creating a new sale (venda).
@@ -56,5 +58,8 @@
         /// </summary>
         /// <value>The date and time when the sale (venda) was last updated, or null if never modified.</value>
         public DateTime? DataAlteracao { get; set; }
+
+        // Ajustando para ser uma lista de objetos CreateItemVendaResult em vez de string
+        public List<CreateItemVendaResult> ItensVenda { get; set; } = new List<CreateItemVendaResult>();
     }
 }

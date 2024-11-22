@@ -28,7 +28,7 @@ public class CreateItemVendaRequestValidator : AbstractValidator<CreateItemVenda
         RuleFor(item => item.Quantidade).GreaterThan(0);
         RuleFor(item => item.PrecoUnitario).GreaterThan(0);
         RuleFor(item => item.ValorTotal).GreaterThan(0).When(item => item.Quantidade > 0 && item.PrecoUnitario > 0);
-        RuleFor(item => item.Desconto).InclusiveBetween(0, 100);
+        //RuleFor(item => item.Desconto).InclusiveBetween(0, 100);
         RuleFor(item => item.Status).NotEqual(ItemVendaStatus.Inactive); // Removida a duplicação
     }
 }

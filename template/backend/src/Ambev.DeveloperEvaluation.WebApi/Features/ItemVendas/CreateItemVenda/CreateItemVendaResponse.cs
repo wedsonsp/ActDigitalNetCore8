@@ -47,7 +47,7 @@ public class CreateItemVendaResponse
     /// <summary>
     /// The discount applied to the item
     /// </summary>
-    public decimal Desconto { get; set; }
+    //public decimal Desconto { get; set; }
 
     /// <summary>
     /// The status of the item in the sale

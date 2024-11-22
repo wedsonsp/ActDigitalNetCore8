@@ -34,7 +34,7 @@ public class CreateItemVendaRequest
     /// <summary>
     /// Gets or sets the discount applied to the item.
     /// </summary>
-    public decimal Desconto { get; set; }
+    //public decimal Desconto { get; set; }
 
     /// <summary>
     /// Gets or sets the status of the item in the sale.

@@ -75,15 +75,15 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 command = _mapper.Map<CreateVendaCommand>(request);
 
                 // Atribuindo corretamente NomeProduto e Desconto
-                foreach (var item in command.ItensVenda)
-                {
-                    item.NomeProduto = request.ItensVenda
-                                               .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
-                                               .NomeProduto;
-                    item.Desconto = request.ItensVenda
-                                           .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
-                                           .Desconto ?? 0; // Se o desconto for nulo, atribui 0
-                }
+                    foreach (var item in command.ItensVenda)
+                    {
+                        item.NomeProduto = request.ItensVenda
+                                                   .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
+                                                   .NomeProduto;
+                        //item.Desconto = request.ItensVenda
+                        //                       .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
+                        //                       .Desconto ?? 0; // Se o desconto for nulo, atribui 0
+                    }
 
                 // Calcular os valores de cada item
                 foreach (var item in command.ItensVenda)

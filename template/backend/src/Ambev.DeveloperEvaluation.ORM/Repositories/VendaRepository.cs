@@ -35,44 +35,66 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         {
             // Evitar duplicação de itens de venda (agrupando por produto)
             var itensVenda = venda.ItensVenda
-                                  .GroupBy(i => i.IdProduto)
-                                  .Select(g => g.First())  // Seleciona o primeiro item de cada grupo
-                                  .ToList();
+                                   .GroupBy(i => i.IdProduto)
+                                   .Select(g => g.First())  // Seleciona o primeiro item de cada grupo
+                                   .ToList();
 
-            // Verificar se algum item tem mais de 20 unidades
+            // Validar se algum item tem mais de 20 unidades
             foreach (var item in itensVenda)
             {
+                // Verificar se a quantidade do item é maior que 20
                 if (item.Quantidade > 20)
                 {
-                    throw new ArgumentException($"Não é permitido vender mais de 20 itens do produto {item.IdProduto}."); // Lançar exceção se exceder o limite
+                    throw new ArgumentException($"Não é permitido vender mais de 20 unidades do Item de cada produto {item.IdProduto}. A quantidade de cade item de um produto não pode exceder 20.");
                 }
+            }
+
+            // Validar a soma das quantidades de todos os itens de cada produto
+            foreach (var item in itensVenda)
+            {
+                // Somar todas as quantidades de itens com o mesmo IdProduto
+                var quantidadeTotal = venda.ItensVenda
+                                             .Where(i => i.IdProduto == item.IdProduto)  // Filtra os itens do mesmo produto
+                                             .Sum(i => i.Quantidade);  // Soma todas as quantidades do produto
+
+                // Validar se a quantidade total de itens do produto excede 20
+                if (quantidadeTotal > 20)
+                {
+                    throw new ArgumentException($"Não é permitido vender mais de 20 unidades por total de produtos comprados {item.IdProduto}. A quantidade total excede 20.");
+                }
+
+                // Atualiza a quantidade do item para refletir a soma total das quantidades de itens do mesmo produto
+                item.Quantidade = quantidadeTotal;
             }
 
             // Atribuir os itens filtrados à venda
             venda.ItensVenda = itensVenda;
 
-            // Calcular o valor total de cada item e aplicar o desconto no item
+            // Calcular o valor total de cada item (quantidade * preço unitário)
             foreach (var item in venda.ItensVenda)
             {
                 item.ValorTotal = item.Quantidade * item.PrecoUnitario;
 
-                // Calcular o desconto do item, baseado na quantidade
-                item.Desconto = CalcularDesconto(item.Quantidade);  // Cálculo do desconto por item
+                // Calcular o desconto baseado no valor total do item
+                item.Desconto = CalcularDesconto((int)item.ValorTotal);  // Desconto baseado no valor total do item
 
                 // Subtrair o desconto do valor total do item
                 item.ValorTotal -= item.Desconto;
             }
 
-            // Calcular o valor total dos produtos da venda (após os descontos nos itens)
-            venda.ValorTotalVenda = venda.ItensVenda.Sum(item => item.ValorTotal);
+            // Calcular a soma de todas as quantidades de itens para usar no cálculo do desconto da venda
+            var somaQuantidades = venda.ItensVenda.Sum(item => item.Quantidade);
 
-            // Calcular o desconto total para a venda com base no valor total dos itens
-            venda.DescontoVenda = CalcularDescontoVenda((int)venda.ValorTotalVenda); // Calcular o desconto para a venda
+            // Calcular o desconto total para a venda baseado na soma das quantidades
+            venda.DescontoVenda = CalcularDescontoVenda(somaQuantidades); // Agora, passando a soma das quantidades
+
+            // Calcular o valor total da venda (após o desconto total)
+            venda.ValorTotalVenda = venda.ItensVenda.Sum(item => item.ValorTotal);
 
             // Calcular o valor total da venda (após o desconto total)
             venda.ValorTotalVendaDesconto = venda.ValorTotalVenda - (venda.ValorTotalVenda * venda.DescontoVenda);
 
-            //Data de criação da venda
+            // Data de criação da venda
             venda.DataCadastro = DateTime.UtcNow;
 
             // Salvar a venda no banco
@@ -81,6 +103,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
 
             return venda;
         }
+
+
+
 
 
 

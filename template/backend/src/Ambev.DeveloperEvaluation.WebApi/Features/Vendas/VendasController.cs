@@ -13,6 +13,8 @@ using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.GetVenda;
 using Ambev.DeveloperEvaluation.Application.Vendas.GetVenda;
 using Ambev.DeveloperEvaluation.Application.Vendas.DeleteVenda;
+using Ambev.DeveloperEvaluation.Application.Vendas.UpdateVenda;
+using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.UpdateVenda;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
 {
@@ -158,18 +160,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
             });
         }
 
-        public class GetVendaByIdQuery : IRequest<Venda>
-        {
-            public Guid Id { get; }
-
-            public GetVendaByIdQuery(Guid id)
-            {
-                Id = id;
-            }
-        }
-
-
-
         //[HttpGet("{id}")]
         //[ProducesResponseType(typeof(ApiResponseWithData<GetVendaResponse>), StatusCodes.Status200OK)]
         //[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
@@ -253,5 +243,76 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 Message = "Sale deleted successfully"
             });
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ApiResponseWithData<UpdateVendaResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateVenda(Guid id, [FromBody] UpdateVendaRequest request, CancellationToken cancellationToken)
+        {
+            // Validação da requisição
+            var validator = new UpdateVendaRequestValidator();
+            var validationResult = await validator.ValidateAsync(request, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                var errorDetails = validationResult.Errors
+                    .Select(e => (ValidationErrorDetail)e)
+                    .ToList();
+
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Message = "Request validation failed",
+                    Errors = errorDetails
+                });
+            }
+
+            // Verificando se a venda existe
+            var existingVenda = await _mediator.Send(new GetVendaByIdQuery(id), cancellationToken);  // Envio da consulta
+            if (existingVenda == null)
+            {
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Message = "Sale not found"
+                });
+            }
+
+            // Mapeando o request para o comando de atualização
+            UpdateVendaCommand command = _mapper.Map<UpdateVendaCommand>(request);
+            command.Id = id; // Garantir que o ID da venda seja o correto para a atualização
+
+            // Calcular os valores de cada item
+            foreach (var item in command.ItensVenda)
+            {
+                item.ValorTotal = item.Quantidade * item.PrecoUnitario;
+            }
+
+            // Calcular o valor total da venda
+            command.ValorTotalVenda = command.ItensVenda.Sum(item => item.ValorTotal);
+
+            // Enviando o comando para realizar a atualização
+            var response = await _mediator.Send(command, cancellationToken);
+
+            if (response == null)
+            {
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Message = "Sale update failed"
+                });
+            }
+
+            // Retorna a resposta com os dados atualizados
+            return Ok(new ApiResponseWithData<UpdateVendaResponse>
+            {
+                Success = true,
+                Message = "Sale updated successfully",
+                Data = _mapper.Map<UpdateVendaResponse>(response)
+            });
+        }
+
+
     }
 }

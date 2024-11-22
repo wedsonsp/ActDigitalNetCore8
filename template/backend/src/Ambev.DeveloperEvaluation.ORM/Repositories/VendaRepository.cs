@@ -134,9 +134,10 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         public async Task<Venda?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await _context.Vendas
-                .Include(v => v.ItensVenda)  // Assuming ItensVenda is a related entity
-                .FirstOrDefaultAsync(v => v.Id == id, cancellationToken);
+                .Include(v => v.ItensVenda)  // Inclui os itens da venda
+                .FirstOrDefaultAsync(v => v.Id == id, cancellationToken); // Filtra pela venda com o id especificado
         }
+
 
         /// <summary>
         /// Retrieves all vendas associated with a specific client
@@ -208,10 +209,28 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <returns>The updated venda</returns>
         public async Task<Venda> UpdateAsync(Venda venda, CancellationToken cancellationToken = default)
         {
-            _context.Vendas.Update(venda);
+            // Buscar a venda existente no banco
+            var vendaExistente = await _context.Vendas
+                .FirstOrDefaultAsync(v => v.Id == venda.Id, cancellationToken);
+
+            if (vendaExistente == null)
+            {
+                throw new ArgumentException("Venda não encontrada.");
+            }
+
+            // Atualizar os campos da venda
+            vendaExistente.ValorTotalVenda = venda.ValorTotalVenda;
+            vendaExistente.ValorTotalVendaDesconto = venda.ValorTotalVendaDesconto;
+            vendaExistente.DescontoVenda = venda.DescontoVenda;
+            vendaExistente.Status = venda.Status;
+            vendaExistente.DataAlteracao = DateTime.UtcNow;
+
+            // Salvar as alterações no banco
             await _context.SaveChangesAsync(cancellationToken);
-            return venda;
+
+            return vendaExistente;
         }
+
 
         /// <summary>
         /// Deletes a venda from the database

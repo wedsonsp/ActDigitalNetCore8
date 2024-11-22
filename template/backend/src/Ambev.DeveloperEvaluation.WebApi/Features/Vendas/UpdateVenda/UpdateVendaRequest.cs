@@ -21,17 +21,17 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.UpdateVenda
         /// <summary>
         /// Gets or sets the unique identifier of the branch (Filial) for the sale.
         /// </summary>
-        public Guid? IdFilial { get; set; }
+        //public Guid? IdFilial { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the branch (Filial). This is an optional field for easier querying.
         /// </summary>
-        public string? NomeFilial { get; set; } = string.Empty;
+        //public string? NomeFilial { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the unique identifier of the product for the sale.
         /// </summary>
-        public Guid? IdProduto { get; set; }
+        //public Guid? IdProduto { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the product. This is an optional field for easier querying.
@@ -67,8 +67,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.UpdateVenda
         /// Gets or sets the list of sale items for the update.
         /// </summary>
         //public List<CreateItemVendaRequest> ItensVenda { get; set; } = new List<CreateItemVendaRequest>();
-
-        public decimal? DescontoVenda{ get; set; }
 
         /// <summary>
         /// Gets or sets the sale update date (optional).

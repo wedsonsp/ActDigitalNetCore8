@@ -244,7 +244,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
             });
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ApiResponseWithData<UpdateVendaResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]

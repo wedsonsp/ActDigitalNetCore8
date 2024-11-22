@@ -17,19 +17,19 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.UpdateVenda
             //    .When(x => !string.IsNullOrEmpty(x.NumeroVenda));
 
             // Valida que o IdFilial não pode ser nulo ou vazio, mas é opcional
-            RuleFor(x => x.IdFilial)
-                .NotEmpty().WithMessage("Id da filial é obrigatório.")
-                .When(x => x.IdFilial.HasValue);
+            //RuleFor(x => x.IdFilial)
+            //    .NotEmpty().WithMessage("Id da filial é obrigatório.")
+            //    .When(x => x.IdFilial.HasValue);
 
             // Valida que o NomeFilial não pode ser vazio, mas é opcional
-            RuleFor(x => x.NomeFilial)
-                .NotEmpty().WithMessage("Nome da filial é obrigatório.")
-                .When(x => !string.IsNullOrEmpty(x.NomeFilial));
+            //RuleFor(x => x.NomeFilial)
+            //    .NotEmpty().WithMessage("Nome da filial é obrigatório.")
+            //    .When(x => !string.IsNullOrEmpty(x.NomeFilial));
 
             // Valida que o IdProduto é opcional, mas se fornecido, deve ser válido
-            RuleFor(x => x.IdProduto)
-                .NotEmpty().WithMessage("Id do produto é obrigatório.")
-                .When(x => x.IdProduto.HasValue);
+            //RuleFor(x => x.IdProduto)
+            //    .NotEmpty().WithMessage("Id do produto é obrigatório.")
+            //    .When(x => x.IdProduto.HasValue);
 
             // Valida que o NomeProduto não pode ser vazio, mas é opcional
             //RuleFor(x => x.NomeProduto)

@@ -8,6 +8,8 @@ using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
 using Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda;
 using Ambev.DeveloperEvaluation.Application.Vendas.GetVenda;
+using Ambev.DeveloperEvaluation.Application.Vendas.UpdateVenda;
+using Ambev.DeveloperEvaluation.Application.Vendas.UpdateVendas;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
@@ -17,6 +19,7 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Produtos.CreateProduto;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
 using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda;
 using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.GetVenda;
+using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.UpdateVenda;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -150,8 +153,13 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
                 .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
                 .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto))
                 .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade))
-                .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario)); 
+                .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario));
 
+            CreateMap<UpdateVendaRequest, UpdateVendaCommand>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+
+            CreateMap<UpdateVendaResult, UpdateVendaResponse>()
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
         }
 
         // Método auxiliar para mapear o status da venda

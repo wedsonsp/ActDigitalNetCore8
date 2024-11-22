@@ -79,19 +79,19 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
         /// <summary>
         /// Método para calcular o valor total da venda a partir dos itens
         /// </summary>
-        public void CalcularValorTotal()
-        {
-            // Inicializa as variáveis totais
-            ValorTotalVenda = 0;
-            ValorTotalVendaDesconto = 0;
+        //public void CalcularValorTotal()
+        //{
+        //    // Inicializa as variáveis totais
+        //    ValorTotalVenda = 0;
+        //    ValorTotalVendaDesconto = 0;
 
-            // Calculando os valores totais
-            foreach (var item in ItensVenda)
-            {
-                ValorTotalVendaDesconto += item.Quantidade * item.PrecoUnitario;  // Valor total dos produtos (sem desconto)
-                ValorTotalVenda += item.ValorTotal;  // Valor total considerando o desconto
-            }
-        }
+        //    // Calculando os valores totais
+        //    foreach (var item in ItensVenda)
+        //    {
+        //        ValorTotalVendaDesconto += item.Quantidade * item.PrecoUnitario;  // Valor total dos produtos (sem desconto)
+        //        ValorTotalVenda += item.ValorTotal;  // Valor total considerando o desconto
+        //    }
+        //}
 
         /// <summary>
         /// Inicializa uma nova instância da classe Venda
@@ -102,6 +102,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities
             DataCadastro = DateTime.UtcNow;
             DataVenda = DateTime.UtcNow;
         }
+
 
 
     }

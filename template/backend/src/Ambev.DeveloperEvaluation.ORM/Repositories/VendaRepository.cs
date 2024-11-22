@@ -64,13 +64,13 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             }
 
             // Calcular o valor total dos produtos da venda (após os descontos nos itens)
-            venda.ValorTotalVendaDesconto = venda.ItensVenda.Sum(item => item.ValorTotal);
+            venda.ValorTotalVenda = venda.ItensVenda.Sum(item => item.ValorTotal);
 
             // Calcular o desconto total para a venda com base no valor total dos itens
-            venda.DescontoVenda = CalcularDescontoVenda((int)venda.ValorTotalVendaDesconto); // Calcular o desconto para a venda
+            venda.DescontoVenda = CalcularDescontoVenda((int)venda.ValorTotalVenda); // Calcular o desconto para a venda
 
             // Calcular o valor total da venda (após o desconto total)
-            venda.ValorTotalVenda = venda.ValorTotalVendaDesconto - venda.DescontoVenda;
+            venda.ValorTotalVendaDesconto = venda.ValorTotalVenda - (venda.ValorTotalVenda * venda.DescontoVenda);
 
             //Data de criação da venda
             venda.DataCadastro = DateTime.UtcNow;
@@ -208,6 +208,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The updated venda</returns>
         public async Task<Venda> UpdateAsync(Venda venda, CancellationToken cancellationToken = default)
+        
         {
             // Buscar a venda existente no banco
             var vendaExistente = await _context.Vendas

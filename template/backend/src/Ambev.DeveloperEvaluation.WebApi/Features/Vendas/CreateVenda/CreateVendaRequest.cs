@@ -98,7 +98,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda
         public string NomeProduto { get; set; } = string.Empty;
         public int Quantidade { get; set; }
         public decimal PrecoUnitario { get; set; }
-        public decimal Desconto { get; set; }
         public int Status { get; set; }
     }
 }

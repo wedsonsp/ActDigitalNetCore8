@@ -4,12 +4,7 @@ using AutoMapper;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda;
 using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.CreateVenda;
-using FluentValidation;
-using System.Threading.Tasks;
-using System.Threading;
-using Microsoft.AspNetCore.Http;
 using Ambev.DeveloperEvaluation.Common.Validation;
-using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.GetVenda;
 using Ambev.DeveloperEvaluation.Application.Vendas.GetVenda;
 using Ambev.DeveloperEvaluation.Application.Vendas.DeleteVenda;
@@ -74,16 +69,19 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
             {
                 command = _mapper.Map<CreateVendaCommand>(request);
 
-                // Atribuindo corretamente NomeProduto e Desconto
-                    foreach (var item in command.ItensVenda)
-                    {
-                        item.NomeProduto = request.ItensVenda
-                                                   .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
-                                                   .NomeProduto;
-                        //item.Desconto = request.ItensVenda
-                        //                       .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
-                        //                       .Desconto ?? 0; // Se o desconto for nulo, atribui 0
-                    }
+                // Garantir que os itens sejam únicos (sem duplicação)
+                command.ItensVenda = command.ItensVenda
+                    .GroupBy(i => i.IdProduto)
+                    .Select(g => g.First()) // Seleciona o primeiro item de cada grupo
+                    .ToList();
+
+                // Atribuindo corretamente NomeProduto
+                foreach (var item in command.ItensVenda)
+                {
+                    item.NomeProduto = request.ItensVenda
+                        .FirstOrDefault(i => i.IdProduto == item.IdProduto)?
+                        .NomeProduto;
+                }
 
                 // Calcular os valores de cada item
                 foreach (var item in command.ItensVenda)
@@ -93,8 +91,6 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
 
                 // Calcular o valor total da venda
                 command.ValorTotalVenda = command.ItensVenda.Sum(item => item.ValorTotal);
-
-
             }
             catch (AutoMapperMappingException ex)
             {
@@ -125,6 +121,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 Data = _mapper.Map<CreateVendaResponse>(response)
             });
         }
+
 
 
         /// <summary>

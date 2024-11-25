@@ -71,16 +71,16 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             venda.ItensVenda = itensVenda;
 
             // Calcular o valor total de cada item (quantidade * preço unitário)
-            foreach (var item in venda.ItensVenda)
-            {
-                item.ValorTotal = item.Quantidade * item.PrecoUnitario;
+            //foreach (var item in venda.ItensVenda)
+            //{
+            //    item.ValorTotal = item.Quantidade * item.PrecoUnitario;
 
-                // Calcular o desconto baseado no valor total do item
-                item.Desconto = CalcularDesconto((int)item.ValorTotal);  // Desconto baseado no valor total do item
+            //    // Calcular o desconto baseado no valor total do item
+            //    item.Desconto = CalcularDesconto((int)item.ValorTotal);  // Desconto baseado no valor total do item
 
-                // Subtrair o desconto do valor total do item
-                item.ValorTotal -= item.Desconto;
-            }
+            //    // Subtrair o desconto do valor total do item
+            //    item.ValorTotal -= item.Desconto;
+            //}
 
             // Calcular a soma de todas as quantidades de itens para usar no cálculo do desconto da venda
             var somaQuantidades = venda.ItensVenda.Sum(item => item.Quantidade);

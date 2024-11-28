@@ -23,6 +23,7 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Vendas.UpdateVenda;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using ItemVenda = Ambev.DeveloperEvaluation.Domain.Entities.ItemVenda;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Mappings
 {
@@ -160,6 +161,17 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
 
             CreateMap<UpdateVendaResult, UpdateVendaResponse>()
            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+
+            // Mapeando o comando CreateVendaCommand para a entidade Venda
+            CreateMap<CreateVendaCommand, Venda>()
+                .ForMember(dest => dest.ItensVenda, opt => opt.MapFrom(src => src.ItensVenda)); // Garantir que os ItensVenda sejam mapeados corretamente
+
+            // Mapeando os itens de venda
+            CreateMap<CreateItemVendaCommand, Domain.Entities.ItemVenda>();
+
+            // Mapeamento de ItemVenda para CreateItemVendaResult
+            CreateMap<ItemVenda, CreateItemVendaResult>();
+
         }
 
         // Método auxiliar para mapear o status da venda

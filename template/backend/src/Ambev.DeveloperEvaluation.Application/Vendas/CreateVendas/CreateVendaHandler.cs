@@ -41,21 +41,7 @@ namespace Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda
                 throw new InvalidOperationException($"A venda com o número {command.NumeroVenda} já existe.");
 
             // Mapeando o comando para a entidade Venda
-            var venda = _mapper.Map<Venda>(command);
-
-            // Mapeando os itens de venda e associando à venda
-            foreach (var itemCommand in command.ItensVenda)
-            {
-                var itemVenda = new ItemVenda
-                {
-                    IdProduto = itemCommand.IdProduto,
-                    Quantidade = itemCommand.Quantidade,
-                    PrecoUnitario = itemCommand.PrecoUnitario,
-                    ValorTotal = itemCommand.ValorTotal
-                };
-
-                venda.ItensVenda.Add(itemVenda);  // Associa o item à venda
-            }
+            var venda = _mapper.Map<Venda>(command);  // Aqui, os itens já são mapeados para a lista de ItensVenda, se configurado corretamente no AutoMapper.
 
             // Criando a venda no repositório
             var createdVenda = await _vendaRepository.CreateAsync(venda, cancellationToken);
@@ -76,6 +62,7 @@ namespace Ambev.DeveloperEvaluation.Application.Vendas.CreateVenda
 
             return result;
         }
+
     }
 
 }

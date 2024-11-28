@@ -70,10 +70,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 command = _mapper.Map<CreateVendaCommand>(request);
 
                 // Garantir que os itens sejam únicos (sem duplicação)
-                command.ItensVenda = command.ItensVenda
-                    .GroupBy(i => i.IdProduto)
-                    .Select(g => g.First()) // Seleciona o primeiro item de cada grupo
-                    .ToList();
+                command.ItensVenda = command.ItensVenda.ToList();
 
                 // Atribuindo corretamente NomeProduto
                 foreach (var item in command.ItensVenda)

@@ -214,9 +214,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories
             }
 
             // Atualizar os campos da venda
-            vendaExistente.ValorTotalVenda = venda.ValorTotalVenda;
-            vendaExistente.ValorTotalVendaDesconto = venda.ValorTotalVendaDesconto;
-            vendaExistente.DescontoVenda = venda.DescontoVenda;
+            //vendaExistente.ValorTotalVenda = venda.ValorTotalVenda;
+            //vendaExistente.ValorTotalVendaDesconto = venda.ValorTotalVendaDesconto;
+            //vendaExistente.DescontoVenda = venda.DescontoVenda;
             vendaExistente.Status = venda.Status;
             vendaExistente.DataAlteracao = DateTime.UtcNow;
 

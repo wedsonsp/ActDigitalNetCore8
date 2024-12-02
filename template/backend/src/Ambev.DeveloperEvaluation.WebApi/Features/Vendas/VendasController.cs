@@ -273,18 +273,23 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 });
             }
 
-            // Mapeando o request para o comando de atualização
-            UpdateVendaCommand command = _mapper.Map<UpdateVendaCommand>(request);
-            command.Id = id; // Garantir que o ID da venda seja o correto para a atualização
-
-            // Calcular os valores de cada item
-            foreach (var item in command.ItensVenda)
+            // Apenas o campo 'status' será atualizado
+            if (request.Status != null)
             {
-                item.ValorTotal = item.Quantidade * item.PrecoUnitario;
+                existingVenda.Status = request.Status; // Atualiza o campo 'status'
+            }
+            else
+            {
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Message = "'Status' field is required"
+                });
             }
 
-            // Calcular o valor total da venda
-            command.ValorTotalVenda = command.ItensVenda.Sum(item => item.ValorTotal);
+            // Mapeando o request para o comando de atualização
+            UpdateVendaCommand command = _mapper.Map<UpdateVendaCommand>(existingVenda); // Usando os dados existentes para garantir a integridade dos outros campos
+            command.Id = id; // Garantir que o ID da venda seja o correto para a atualização
 
             // Enviando o comando para realizar a atualização
             var response = await _mediator.Send(command, cancellationToken);
@@ -306,6 +311,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Vendas
                 Data = _mapper.Map<UpdateVendaResponse>(response)
             });
         }
+
 
 
     }

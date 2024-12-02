@@ -3,6 +3,7 @@ using Ambev.DeveloperEvaluation.Application.Clientes.CreateCliente;
 using Ambev.DeveloperEvaluation.Application.Filiais;
 using Ambev.DeveloperEvaluation.Application.Filiais.CreateFilial;
 using Ambev.DeveloperEvaluation.Application.ItemVendas.CreateItemVenda;
+using Ambev.DeveloperEvaluation.Application.ItemVendas.UpdateItemVenda;
 using Ambev.DeveloperEvaluation.Application.Produtos.CreateProduto;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Application.Users.GetUser;
@@ -172,7 +173,21 @@ namespace Ambev.DeveloperEvaluation.WebApi.Mappings
             // Mapeamento de ItemVenda para CreateItemVendaResult
             CreateMap<ItemVenda, CreateItemVendaResult>();
 
+            // Mapeando de Venda para UpdateVendaCommand
+            CreateMap<Venda, UpdateVendaCommand>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)) // Mapear explicitamente o campo Id
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status)) // Mapear o campo Status
+                .ForMember(dest => dest.ItensVenda, opt => opt.MapFrom(src => src.ItensVenda));
+
+            // Mapeamento de ItemVenda para UpdateItemVendaCommand
+            CreateMap<ItemVenda, UpdateItemVendaCommand>()
+                .ForMember(dest => dest.IdProduto, opt => opt.MapFrom(src => src.IdProduto))
+                .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade))
+                .ForMember(dest => dest.PrecoUnitario, opt => opt.MapFrom(src => src.PrecoUnitario))
+                .ForMember(dest => dest.NomeProduto, opt => opt.MapFrom(src => src.NomeProduto)); // Adicione outros mapeamentos conforme necessário
         }
+
+        
 
         // Método auxiliar para mapear o status da venda
         private VendaStatus MapStatusVenda(string status)
